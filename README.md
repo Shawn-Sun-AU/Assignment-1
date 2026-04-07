@@ -18,5 +18,4 @@ Help users record, view, modify and delete their daily expenses, and support man
 - Single-page application experience, no need to refresh the page
 - Responsive design 
 =======
-# Assignment-1
->>>>>>> c3abea2e651923452dee7b3100c91c418f5bcf0d
+
