@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 # Expense Tracker
 
 ## Introduction
@@ -17,5 +16,18 @@ Help users record, view, modify and delete their daily expenses, and support man
 - Delete expenses (Delete)
 - Single-page application experience, no need to refresh the page
 - Responsive design 
-=======
+
+## In terminal(1) use
+\```bash
+cd backend
+.\venv\Scripts\activate
+uvicorn main:app --reload --port 8000
+\```
+
+## In ternimal(2) use
+\```bash
+cd frontend
+npm run dev
+\```
+
 
