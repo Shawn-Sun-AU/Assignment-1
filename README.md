@@ -24,9 +24,8 @@ cd backend
 uvicorn main:app --reload --port 8000
 
 ## In ternimal(2) use
-\```bash
+```bash
 cd frontend
 npm run dev
-\```
 
 
