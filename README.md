@@ -18,11 +18,10 @@ Help users record, view, modify and delete their daily expenses, and support man
 - Responsive design 
 
 ## In terminal(1) use
-\```bash
+```bash
 cd backend
 .\venv\Scripts\activate
 uvicorn main:app --reload --port 8000
-\```
 
 ## In ternimal(2) use
 \```bash
