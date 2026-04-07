@@ -2,7 +2,6 @@ import { useState, useEffect } from 'react';
 import axios from 'axios';
 import './App.css';
 
-// 使用代理，API 前缀为 /api
 const API_URL = '/api/expenses';
 
 function App() {
@@ -16,7 +15,6 @@ function App() {
   });
   const [editingId, setEditingId] = useState(null);
 
-  // 获取所有开支
   const fetchExpenses = async () => {
     try {
       const res = await axios.get(API_URL);
@@ -44,7 +42,7 @@ function App() {
         await axios.post(API_URL, form);
       }
       setForm({ title: '', category: '', amount: '', date: '', description: '' });
-      fetchExpenses(); // 刷新列表
+      fetchExpenses();
     } catch (err) {
       console.error('Save failed', err);
     }
@@ -68,6 +66,7 @@ function App() {
       date: expense.date,
       description: expense.description || ''
     });
+    window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
   const handleCancelEdit = () => {
@@ -76,31 +75,112 @@ function App() {
   };
 
   return (
-    <div className="container">
-      <h1>Expense Tracker</h1>
-      <form onSubmit={handleSubmit} className="expense-form">
-        <input name="title" placeholder="Title" value={form.title} onChange={handleChange} required />
-        <input name="category" placeholder="Category (such as catering, transportation)" value={form.category} onChange={handleChange} required />
-        <input name="amount" type="number" step="0.01" placeholder="Amount" value={form.amount} onChange={handleChange} required />
-        <input name="date" type="date" value={form.date} onChange={handleChange} required />
-        <input name="description" placeholder="Description (Optional)" value={form.description} onChange={handleChange} />
-        <button type="submit">{editingId ? 'Update' : 'Add'}</button>
-        {editingId && <button type="button" onClick={handleCancelEdit}>Cancel</button>}
-      </form>
-      <ul className="expense-list">
-        {expenses.map(exp => (
-          <li key={exp.id}>
-            <div className="expense-info">
-              <strong>{exp.title}</strong> - {exp.category} - ¥{exp.amount} - {exp.date}
-              {exp.description && <span className="desc"> ({exp.description})</span>}
+    <div className="app-container">
+      <header className="app-header">
+        <h1>Expense Tracker</h1>
+        <p className="subtitle">Track your daily spending</p>
+      </header>
+      <div className="form-card">
+        <h2>{editingId ? 'Edit Expense' : 'Add New Expense'}</h2>
+        <form onSubmit={handleSubmit}>
+          <div className="form-row">
+            <div className="form-group">
+              <label>Title</label>
+              <input
+                name="title"
+                placeholder="e.g., Groceries"
+                value={form.title}
+                onChange={handleChange}
+                required
+              />
             </div>
-            <div className="actions">
-              <button onClick={() => handleEdit(exp)}>edit</button>
-              <button onClick={() => handleDelete(exp.id)}>Delete</button>
+            <div className="form-group">
+              <label>Category</label>
+              <input
+                name="category"
+                placeholder="e.g., Food, Transport"
+                value={form.category}
+                onChange={handleChange}
+                required
+              />
             </div>
-          </li>
-        ))}
-      </ul>
+          </div>
+
+          <div className="form-row">
+            <div className="form-group">
+              <label>Amount ($)</label>
+              <input
+                type="number"
+                step="0.01"
+                name="amount"
+                placeholder="0.00"
+                value={form.amount}
+                onChange={handleChange}
+                required
+              />
+            </div>
+            <div className="form-group">
+              <label>Date</label>
+              <input
+                type="date"
+                name="date"
+                value={form.date}
+                onChange={handleChange}
+                required
+              />
+            </div>
+          </div>
+
+          <div className="form-row">
+            <div className="form-group full-width">
+              <label>Description (optional)</label>
+              <input
+                name="description"
+                placeholder="Add a note..."
+                value={form.description}
+                onChange={handleChange}
+              />
+            </div>
+          </div>
+
+          <div className="form-actions">
+            <button type="submit" className="btn-primary">
+              {editingId ? 'Update Expense' : 'Add Expense'}
+            </button>
+            {editingId && (
+              <button type="button" className="btn-secondary" onClick={handleCancelEdit}>
+                Cancel
+              </button>
+            )}
+          </div>
+        </form>
+      </div>
+      <div className="expenses-list">
+        <h2>Your Expenses</h2>
+        {expenses.length === 0 ? (
+          <p className="empty-message">No expenses yet. Add your first expense above!</p>
+        ) : (
+          <div className="expenses-grid">
+            {expenses.map((exp) => (
+              <div key={exp.id} className="expense-card">
+                <div className="expense-header">
+                  <h3>{exp.title}</h3>
+                  <span className="expense-category">{exp.category}</span>
+                </div>
+                <div className="expense-details">
+                  <span className="expense-amount">${parseFloat(exp.amount).toFixed(2)}</span>
+                  <span className="expense-date">{exp.date}</span>
+                </div>
+                {exp.description && <p className="expense-description">{exp.description}</p>}
+                <div className="expense-actions">
+                  <button onClick={() => handleEdit(exp)} className="edit-btn">Edit</button>
+                  <button onClick={() => handleDelete(exp.id)} className="delete-btn">Delete</button>
+                </div>
+              </div>
+            ))}
+          </div>
+        )}
+      </div>
     </div>
   );
 }
